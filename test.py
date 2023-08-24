@@ -39,7 +39,11 @@ def ws_quote(conid: int):
             sslopt  = { "cert_reqs": CERT_NONE }
         )
     
-    ws.send(f'smd+{conid}+{{ "fields": [ "31", "84", "85", "86", "88" ] }}')
+    ws.recv() # skip initial messages before sending market data subscribe
+    ws.recv()
+    ws.recv()
+    
+    ws.send(f'smd+{conid}+{{ "fields": [ "31", "84", "85", "86", "88", "TimestampBase", "TimestampDelta" ] }}')
 
     while(True):
 
