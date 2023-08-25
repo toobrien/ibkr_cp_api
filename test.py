@@ -46,7 +46,7 @@ def search(symbol: str, name: bool, secType: str):
     print(dumps(res.json()[0], indent = 2))
 
 
-# month is YYYYMM
+# month is like "202308" or "AUG23"
 
 def strikes(conid: str, sectype: str, month: str, exchange: str = None):
 
@@ -61,7 +61,14 @@ def strikes(conid: str, sectype: str, month: str, exchange: str = None):
     print(dumps(res.json(), indent = 2))
 
 
-def info(conid: str, sectype: str, month:str = None):
+def secdef_info(
+    conid:      str,
+    sectype:    str,
+    month:      str = None, 
+    exchange:   str = None,
+    strike:     str = None,
+    right:      str = None
+):
 
     url = f"{REST_URI}/iserver/secdef/info?conid={conid}&sectype={sectype}"
     
@@ -69,8 +76,27 @@ def info(conid: str, sectype: str, month:str = None):
 
         url += f"&month={month}"
 
+    if exchange:
+
+        url += f"&exchange={exchange}"
+
+    if strike:
+
+        url += f"&strike={strike}"
+    
+    if right:
+
+        url += f"&right={right}"
+
     res = get(url)
     
+    print(dumps(res.json(), indent = 2))
+
+
+def contract_info(conid: str):
+
+    res = get(f"{REST_URI}/iserver/contract/{conid}/info")
+
     print(dumps(res.json(), indent = 2))
 
 
@@ -108,7 +134,8 @@ TESTS = {
             "portfolio_summary":    portfolio_summary,
             "search":               search,
             "strikes":              strikes,
-            "info":                 info
+            "secdef_info":          secdef_info,
+            "contract_info":        contract_info
         }
 
 
