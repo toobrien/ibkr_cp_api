@@ -132,12 +132,12 @@ def ws_quote(conid: int):
 
 TESTS = {
             "secdef":               secdef,
-            "ws_quote":             ws_quote,
             "portfolio_summary":    portfolio_summary,
             "search":               search,
             "strikes":              strikes,
             "secdef_info":          secdef_info,
-            "contract_info":        contract_info
+            "contract_info":        contract_info,
+            "ws_quote":             ws_quote
         }
 
 
