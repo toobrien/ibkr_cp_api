@@ -6,7 +6,7 @@ from ssl        import CERT_NONE
 from time       import time
 
 
-# python test.py <test_num> <args>
+# python test.py <test_name> <args>
 
 
 REST_URI    = "http://localhost:5000/v1/api"
@@ -45,6 +45,8 @@ def search(symbol: str, name: bool, secType: str):
 
     print(dumps(res.json()[0], indent = 2))
 
+
+# month is YYYYMM
 
 def strikes(conid: str, sectype: str, month: str, exchange: str = None):
 
@@ -101,19 +103,19 @@ def ws_quote(conid: int):
 
 
 TESTS = {
-            0: secdef,
-            1: ws_quote,
-            2: portfolio_summary,
-            3: search,
-            4: strikes,
-            5: info
+            "secdef":               secdef,
+            "ws_quote":             ws_quote,
+            "portfolio_summary":    portfolio_summary,
+            "search":               search,
+            "strikes":              strikes,
+            "info":                 info
         }
 
 
 
 if __name__ == "__main__":
 
-    test = int(argv[1])
+    test = argv[1]
     args = argv[2:] if len(argv) > 2 else []
 
     t0 = time()
