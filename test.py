@@ -3,25 +3,48 @@ from requests   import get, post
 from sys        import argv
 from websocket  import create_connection
 from ssl        import CERT_NONE
+from time       import time
 
 # ...
 
 
-REST_URI    = "https://localhost:5000/v1/api"
-WS_URI      = "wss://localhost:5000/v1/api/ws"
+REST_URI    = "http://localhost:5000/v1/api"
+WS_URI      = "ws://localhost:5000/v1/api/ws"
 
 
 def secdef(conid: int):
 
     res = post(
                 url     = f"{REST_URI}/trsrv/secdef",
-                verify  = False,
-                json    = {
-                            "conids": [ conid ]
-                        }
+                json    = { "conids": [ conid ] }
             )
         
     print(dumps(res.json(), indent = 2))
+
+
+def portfolio_summary(account_id: str):
+
+    res = get(f"{REST_URI}/portfolio/{account_id}/summary")
+
+    print(dumps(res.json(), indent = 2))
+
+
+def search(symbol: str, name: bool, secType: str):
+
+    name = bool(name)
+
+    res = post(
+            url     = f"{REST_URI}/iserver/secdef/search",
+            json    = {
+                        "symbol":   symbol,
+                        "name":     name,
+                        "secType":  secType
+                    }
+        )
+
+    print(dumps(res.json()[0], indent = 2))
+
+    pass
 
 
 def ws_quote(conid: int):
@@ -54,7 +77,9 @@ def ws_quote(conid: int):
 
 TESTS = [
             secdef,
-            ws_quote
+            ws_quote,
+            portfolio_summary,
+            search
         ]
 
 
@@ -64,4 +89,8 @@ if __name__ == "__main__":
     test = int(argv[1])
     args = argv[2:] if len(argv) > 2 else []
 
+    t0 = time()
+
     TESTS[test](*args)
+
+    print(f"elapsed: {time() - t0:0.3f}")
