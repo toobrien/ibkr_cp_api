@@ -8,6 +8,8 @@ from time       import time
 
 # python test.py <test_name> <args>
 
+# note: disable https in config.yaml
+
 
 REST_URI    = "http://localhost:5000/v1/api"
 WS_URI      = "ws://localhost:5000/v1/api/ws"
