@@ -5,7 +5,8 @@ from websocket  import create_connection
 from ssl        import CERT_NONE
 from time       import time
 
-# ...
+
+# python test.py <test_num> <args>
 
 
 REST_URI    = "http://localhost:5000/v1/api"
@@ -44,7 +45,31 @@ def search(symbol: str, name: bool, secType: str):
 
     print(dumps(res.json()[0], indent = 2))
 
-    pass
+
+def strikes(conid: str, sectype: str, month: str, exchange: str = None):
+
+    url = f"{REST_URI}/iserver/secdef/strikes?conid={conid}&sectype={sectype}&month={month}"
+
+    if exchange:
+
+        url += f"&exchange={exchange}"
+
+    res = get(url)
+
+    print(dumps(res.json(), indent = 2))
+
+
+def info(conid: str, sectype: str, month:str = None):
+
+    url = f"{REST_URI}/iserver/secdef/info?conid={conid}&sectype={sectype}"
+    
+    if month:
+
+        url += f"&month={month}"
+
+    res = get(url)
+    
+    print(dumps(res.json(), indent = 2))
 
 
 def ws_quote(conid: int):
@@ -75,12 +100,14 @@ def ws_quote(conid: int):
         print(dumps(msg, indent = 2))
 
 
-TESTS = [
-            secdef,
-            ws_quote,
-            portfolio_summary,
-            search
-        ]
+TESTS = {
+            0: secdef,
+            1: ws_quote,
+            2: portfolio_summary,
+            3: search,
+            4: strikes,
+            5: info
+        }
 
 
 
