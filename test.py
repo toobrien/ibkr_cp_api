@@ -130,6 +130,11 @@ def ws_quote(conid: int):
         print(dumps(msg, indent = 2))
 
 
+def server():
+
+    pass
+
+
 TESTS = {
             "secdef":               secdef,
             "portfolio_summary":    portfolio_summary,
@@ -137,7 +142,8 @@ TESTS = {
             "strikes":              strikes,
             "secdef_info":          secdef_info,
             "contract_info":        contract_info,
-            "ws_quote":             ws_quote
+            "ws_quote":             ws_quote,
+            "server":               server
         }
 
 
