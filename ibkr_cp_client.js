@@ -16,15 +16,9 @@ class ibkr_cp_client {
         let res = await fetch(
                     `${this.rest_uri}/trsrv/secdef`,
                     {
-                        method: "POST",
-                        body: JSON.stringify(
-                            {
-                                conids: conids
-                            }
-                        ),
-                        headers: {
-                            "Content-Type": "application/json"
-                        }
+                        method:     "POST",
+                        body:       JSON.stringify({ conids: conids }),
+                        headers:    { "Content-Type": "application/json" }
                     }
                 );
         
