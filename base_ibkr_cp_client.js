@@ -1,5 +1,24 @@
 
 
+// market data fields
+
+const mdf = {
+
+    last:           31,
+    bid:            84,
+    ask_size:       85,
+    ask:            86,
+    bid_size:       88,
+    md_available:   6509,
+    last_size:      7059,
+    mark:           7635,
+    delayed:        "HasDelayed",
+    ts_base:        "TimestampBase",
+    ts_delta:       "TimestampDelta"
+
+};
+
+
 class base_ibkr_cp_client {
  
 
