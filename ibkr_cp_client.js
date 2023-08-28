@@ -9,7 +9,6 @@ class ibkr_cp_client {
     ) {
 
         this.rest_uri   = `http://${host}:${port}/v1/api`;
-        this.session    = null;
         this.ws_uri     = `ws://${host}:${port}/v1/api/ws`;
         this.ws         = null;
 
@@ -97,52 +96,50 @@ class ibkr_cp_client {
 
     async init_ws() {
 
-        if (!this.session) {
+        let res = await fetch(`${this.rest_uri}/tickle`);
 
-            let res = await fetch(`${this.rest_uri}/tickle`);
+        if (res.status == 200) {
 
-            if (res.status == 200) {
+            let body            = await res.json();
+            this.session        = body.session;
+            this.ws             = new WebSocket(this.ws_uri);
 
-                let body            = await res.json();
-                this.session        = body.session;
-                this.ws             = new WebSocket(this.ws_uri);
+            let def_ws_handler  = async (evt) =>  {
 
-                let def_ws_handler  = async (evt) =>  {
+                if (evt.data) {
+                
+                    let msg = JSON.parse(await evt.data.text(), null, 2);
 
-                    if (evt.data) {
-                    
-                        let msg = JSON.parse(await evt.data.text(), null, 2);
-
-                        console.log(JSON.stringify(msg, null, 2));
-                    
-                    }
-
+                    console.log(JSON.stringify(msg, null, 2));
+                
                 }
-                
-                this.ws.onerror     = def_ws_handler;
-                this.ws.onopen      = def_ws_handler;
-                this.ws.onmessage   = def_ws_handler;
-                this.ws.onclose     = def_ws_handler;
-
-                while (true)
-
-                    if (!this.ws.readyState)
-
-                        // wait until websocket is ready
-                    
-                        await new Promise(resolve => setTimeout(resolve, 1000));
-                    
-                    else
-
-                        break;
-                
-            } else {
-
-                // error receiving session token
-
-                console.log(res.text);
 
             }
+            
+            this.ws.onerror     = def_ws_handler;
+            this.ws.onopen      = def_ws_handler;
+            this.ws.onmessage   = def_ws_handler;
+            this.ws.onclose     = def_ws_handler;
+
+            while (true)
+
+                if (!this.ws.readyState)
+
+                    // wait until websocket is ready
+                
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                else
+
+                    break;
+            
+        } else {
+
+            // error receiving session token
+
+            console.log(res.text);
+
+            this.ws = null;
 
         }
 
