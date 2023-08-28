@@ -1,6 +1,6 @@
 
 
-async function init() {
+async function demo() {
 
     let client  = new ibkr_cp_client();
     let res     = null;
@@ -26,4 +26,4 @@ async function init() {
 
 }
 
-init();
+demo();
