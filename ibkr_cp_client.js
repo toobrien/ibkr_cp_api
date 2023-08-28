@@ -12,6 +12,23 @@ class ibkr_cp_client {
         this.ws_uri     = `ws://${host}:${port}/v1/api/ws`;
         this.ws         = null;
 
+        let def_ws_handler  = async (evt) =>  {
+
+            if (evt.data) {
+            
+                let msg = JSON.parse(await evt.data.text(), null, 2);
+
+                console.log(JSON.stringify(msg, null, 2));
+            
+            }
+
+        }
+
+        this.ws_cls_handler = def_ws_handler;
+        this.ws_opn_handler = def_ws_handler;
+        this.ws_err_handler = def_ws_handler;
+        this.ws_msg_handler = def_ws_handler;
+
     }
 
     
@@ -103,23 +120,11 @@ class ibkr_cp_client {
             let body            = await res.json();
             this.session        = body.session;
             this.ws             = new WebSocket(this.ws_uri);
-
-            let def_ws_handler  = async (evt) =>  {
-
-                if (evt.data) {
-                
-                    let msg = JSON.parse(await evt.data.text(), null, 2);
-
-                    console.log(JSON.stringify(msg, null, 2));
-                
-                }
-
-            }
             
-            this.ws.onerror     = def_ws_handler;
-            this.ws.onopen      = def_ws_handler;
-            this.ws.onmessage   = def_ws_handler;
-            this.ws.onclose     = def_ws_handler;
+            this.ws.onerror     = this.ws_err_handler;
+            this.ws.onopen      = this.ws_opn_handler;
+            this.ws.onmessage   = this.ws_msg_handler;
+            this.ws.onclose     = this.ws_cls_handler;
 
             while (true)
 
@@ -141,6 +146,46 @@ class ibkr_cp_client {
 
             this.ws = null;
 
+        }
+
+    }
+
+
+    async set_ws_handlers(
+        msg_handler,
+        err_handler,
+        opn_handler,
+        cls_handler
+    ) {
+
+        if (!this.ws) await this.init_ws();
+
+        if (msg_handler) { 
+            
+            this.ws_msg_handler = msg_handler;
+            this.ws.onmessage   = msg_handler;
+
+        }
+
+        if (err_handler) {
+        
+            this.ws_err_handler = err_handler;
+            this.ws.onerror     = err_handler;
+        
+        }
+
+        if (opn_handler) {
+        
+            this.ws_opn_handler = opn_handler
+            this.ws.onopen      = opn_handler;
+        
+        }
+
+        if (cls_handler) {
+        
+            this.ws.onclose     = cls_handler 
+            this.ws.onclose     = cls_handler;
+        
         }
 
     }
