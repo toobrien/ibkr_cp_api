@@ -112,16 +112,15 @@ def ws_quote(conid: int):
 
         exit()
 
-    ws = create_connection(
-            url     = WS_URI,
-            sslopt  = { "cert_reqs": CERT_NONE }
-        )
+    ws = create_connection(WS_URI)
     
     ws.recv() # skip initial messages before sending market data subscribe
     ws.recv()
     ws.recv()
     
-    ws.send(f'smd+{conid}+{{ "fields": [ "31", "84", "85", "86", "88", "TimestampBase", "TimestampDelta" ] }}')
+    cmd = f'smd+{conid}+{{ "fields": [ "31", "84", "85", "86", "88", "TimestampBase", "TimestampDelta" ] }}'
+
+    ws.send(cmd)
 
     while(True):
 
