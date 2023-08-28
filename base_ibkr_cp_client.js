@@ -1,6 +1,6 @@
 
 
-class ibkr_cp_client {
+class base_ibkr_cp_client {
  
 
     constructor(
@@ -191,14 +191,25 @@ class ibkr_cp_client {
     }
 
 
-    async sub_market_data(conid) {
+    async sub_market_data(conid, fields) {
 
         if (!this.ws) await init_ws();
         if (!this.ws) return;
 
-        let cmd = `smd+${conid}+{ "fields": [ "31", "84", "85", "86", "88", "TimestampBase", "TimestampDelta" ] }`;
+        fields = JSON.stringify(fields.map( i => String(i) ));
+
+        let cmd = `smd+${conid}+{ "fields": ${fields} }`;
 
         this.ws.send(cmd);
+
+    }
+
+
+    unsub_market_data(conid) {
+
+        if (!this.ws) return;
+
+        this.ws.send(`umd+${conid}+{}`);
 
     }
 

@@ -2,7 +2,7 @@
 
 async function demo() {
 
-    let client  = new ibkr_cp_client();
+    let client  = new base_ibkr_cp_client();
     let res     = null;
 
     res = await client.secdef([ "416904" ]);
@@ -22,7 +22,11 @@ async function demo() {
     console.log(JSON.stringify(res, null, 2));
 
     await client.init_ws();
-    await client.sub_market_data(497222760);
+    await client.sub_market_data(497222760, [ 31, 84, 85, 86, 88, "TimestampBase", "TimestampDelta" ]);
+
+    await new Promise(resolve => setTimeout(resolve, 10000));
+
+    // client.unsub_market_data(497222760);
 
 }
 
