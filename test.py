@@ -2,7 +2,6 @@ from json       import dumps, loads
 from requests   import get, post
 from sys        import argv
 from websocket  import create_connection
-from ssl        import CERT_NONE
 from time       import time
 
 
