@@ -1,9 +1,9 @@
 
 
-async function demo() {
+async function demo_base_client() {
 
-    let client  = new base_ibkr_cp_client();
-    let res     = null;
+    const   client  = new base_client();
+    let     res     = null;
 
     res = await client.secdef([ "416904" ]);
 
@@ -42,4 +42,12 @@ async function demo() {
 
 }
 
-demo();
+// demo_base_client();
+
+async function demo_opt_client() {
+
+    const client = new opt_client();
+
+}
+
+demo_opt_client();

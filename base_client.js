@@ -19,7 +19,7 @@ const mdf = {
 };
 
 
-class base_ibkr_cp_client {
+class base_client {
  
 
     constructor(
