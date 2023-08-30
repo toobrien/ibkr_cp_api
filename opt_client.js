@@ -13,21 +13,70 @@ class opt_client {
     }
 
 
-    async get_conids_ind(ul_sym, exp, lo_str, hi_str, step, right) {
+    async get_defs_ind(ul_sym, exp, lo_str, hi_str, right) {
+
+        exp             = String(exp);
+        let exp_month   = exp.slice(0, -2);
+        let ids         = [];
+        let res         = await this.base_client.search(ul_sym, true, "IND");
+
+        if (res.status != 200)
+
+            ids = null;
+            
+        else {
+            
+            res         = await res.json();
+            ul_conid    = res[0].conid;
+
+            res         = await this.base_client.secdef_info(ul_conid, "OPT", exp_month, "SMART", 0, right);
+
+            if (res.status != 200)
+
+                ids = null;
+            
+            else {
+
+                res = await res.json();
+
+                for (let i = 0; i < res.length; i++) {
+
+                    let opt_def = res[i];
+
+                    if (
+                            opt_def.maturityDate == exp &&
+                            opt_def.strike >= lo_str    && 
+                            opt_def.strike <= hi_str
+                        )
+
+                        ids.push(
+                            {
+                                "conid":    opt_def.conid,
+                                "strike":   opt_def.strike,
+                                "right":    opt_def.right,
+                                "class":    opt_def.tradingClass
+                            }
+                        );
+
+                }
+
+            }
+        
+        }
+
+        return ids;
+
+    }
+
+
+    async get_defs_stock(ul_sym, exp, lo_str, hi_str, right) {
 
 
 
     }
 
 
-    async get_conids_stock(ul_sym, exp, lo_str, hi_str, step, right) {
-
-
-
-    }
-
-
-    async get_conids_fut(ul_sym, ul_month, exp, lo_str, hi_str, step, right) {
+    async get_defs_fut(ul_sym, ul_month, exp, lo_str, hi_str, right) {
 
 
 
