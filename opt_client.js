@@ -20,24 +20,20 @@ class opt_client {
         let ids         = [];
         let res         = await this.base_client.search(ul_sym, true, "IND");
 
-        if (res.status != 200)
+        if (!res)
 
             ids = null;
             
         else {
             
-            res         = await res.json();
-            ul_conid    = res[0].conid;
+            const ul_conid  = res[0].conid;
+            res             = await this.base_client.secdef_info(ul_conid, "OPT", exp_month, "SMART", "0", right);
 
-            res         = await this.base_client.secdef_info(ul_conid, "OPT", exp_month, "SMART", 0, right);
-
-            if (res.status != 200)
+            if (!res)
 
                 ids = null;
             
             else {
-
-                res = await res.json();
 
                 for (let i = 0; i < res.length; i++) {
 

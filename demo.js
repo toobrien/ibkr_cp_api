@@ -48,6 +48,10 @@ async function demo_opt_client() {
 
     const client = new opt_client();
 
+    let res = await client.get_defs_ind("SPX", "20230830", 4470, 4530, "C");
+
+    let x = 1;
+
 }
 
 demo_opt_client();
