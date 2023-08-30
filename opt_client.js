@@ -9,6 +9,7 @@ class opt_client {
     ) {
 
         this.base_client = new base_client(host, port);
+        this.l1_fields   = [ mdf.bid, mdf.bid_size, mdf.ask, mdf.ask_size, mdf.last, mdf.last_size ];
 
     }
 
@@ -99,18 +100,8 @@ class opt_client {
     }
 
 
-    async get_defs_stock(ul_sym, exp, lo_str, hi_str, right) {
-
-
-
-    }
-
-
-    async get_defs_fut(ul_sym, ul_month, exp, lo_str, hi_str, right) {
-
-
-
-    }
+    async get_defs_stock(ul_sym, exp, lo_str, hi_str, right) {}
+    async get_defs_fut(ul_sym, ul_month, exp, lo_str, hi_str, right) {}
 
 
     async set_handlers(msg_handler, err_handler, opn_handler, cls_handler) {
@@ -125,16 +116,20 @@ class opt_client {
     }
 
 
-    async sub_l1(conids) {
+    async sub_l1(defs) {
 
+        for (let i = 0; i < defs.length; i++)
 
+            await this.base_client.sub_market_data(defs[i].conid, this.l1_fields);
 
     }
 
 
-    async unsub_l1(conids) {
+    async unsub_l1(defs) {
 
+        for (let i = 0; i < defs.length; i++)
 
+            this.base_client.unsub_market_data(defs[i].conid);
 
     }
 

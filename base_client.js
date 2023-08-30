@@ -220,7 +220,7 @@ class base_client {
 
     async sub_market_data(conid, fields) {
 
-        if (!this.ws) await init_ws();
+        if (!this.ws) await this.init_ws();
         if (!this.ws) return;
 
         fields = JSON.stringify(fields.map( i => String(i) ));
