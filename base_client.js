@@ -111,7 +111,9 @@ class base_client {
 
         let res = await fetch(url);
 
-        return await res.json();
+        res = res.status == 200 ? await res.json() : null;
+
+        return res;
 
     }
 
@@ -129,7 +131,9 @@ class base_client {
 
         let res = await fetch(url);
 
-        return await res.json();
+        res = res.status == 200 ? await res.json() : null;
+
+        return res;
 
     }
 

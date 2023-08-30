@@ -17,7 +17,7 @@ class opt_client {
 
         exp             = String(exp);
         let exp_month   = exp.slice(0, -2);
-        let ids         = [];
+        let defs        = [];
         let res         = await this.base_client.search(ul_sym, true, "IND");
 
         if (!res)
@@ -31,7 +31,7 @@ class opt_client {
 
             if (!res)
 
-                ids = null;
+                defs = null;
             
             else {
 
@@ -45,24 +45,56 @@ class opt_client {
                             opt_def.strike <= hi_str
                         )
 
-                        ids.push(
+                        defs.push(
                             {
-                                "conid":    opt_def.conid,
-                                "strike":   opt_def.strike,
-                                "right":    opt_def.right,
-                                "class":    opt_def.tradingClass
+                                conid:  opt_def.conid,
+                                strike: opt_def.strike,
+                                right:  opt_def.right,
+                                class:  opt_def.tradingClass
                             }
                         );
 
                 }
 
-                ids.sort((a, b) => a.strike - b.strike);
+                defs.sort((a, b) => a.strike - b.strike);
 
             }
         
         }
 
-        return ids;
+        return defs;
+
+    }
+
+
+    // US options only
+    // leg_defs: asc sorted opt defs from get_*_defs
+    // side: "+" for long, "-" for short
+    // width: distance, in strikes, between legs
+
+    get_butterfly_defs(leg_defs, side, width) {
+
+        let     defs    = [];
+        const   signs   = side == "-" ? [ "-", "+", "-" ] : [ "+", "-", "+" ];
+
+        for (let i = 0; i < leg_defs.length - 2 * width; i++) {
+
+            let lo_id = leg_defs[i].conid;
+            let md_id = leg_defs[i + width].conid;
+            let hi_id = leg_defs[i + 2 * width].conid;
+
+            defs.push(
+                {
+                    conid:  `28812380;;;${lo_id}/${signs[0]}1,${md_id}/${signs[1]}2,${hi_id}/${signs[2]}1`,
+                    lo:     leg_defs[i].strike,
+                    md:     leg_defs[i + width].strike,
+                    hi:     leg_defs[i + 2 * width].strike
+                }
+            );
+
+        }
+
+        return defs;
 
     }
 
