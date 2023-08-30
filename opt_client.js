@@ -56,6 +56,8 @@ class opt_client {
 
                 }
 
+                ids.sort((a, b) => a.strike - b.strike);
+
             }
         
         }

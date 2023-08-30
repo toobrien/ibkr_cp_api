@@ -62,7 +62,9 @@ class base_client {
                     }
                 );
         
-        return await res.json();
+        res = res.status == 200 ? await res.json() : null;
+
+        return res;
 
     }
 
@@ -84,7 +86,9 @@ class base_client {
                     }
                 );
         
-        return await res.json();
+        res = res.status == 200 ? await res.json() : null;
+
+        return res;
 
     }
 
