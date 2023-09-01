@@ -76,7 +76,7 @@ class opt_client {
     get_butterfly_defs(leg_defs, side, width) {
 
         let     defs    = [];
-        const   signs   = side == "-" ? [ "-", "+", "-" ] : [ "+", "-", "+" ];
+        const   signs   = side == "-" ? [ "-", "", "-" ] : [ "", "-", "" ];
 
         for (let i = 0; i < leg_defs.length - 2 * width; i++) {
 
