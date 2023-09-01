@@ -23,7 +23,7 @@ class opt_client {
 
         if (!res)
 
-            ids = null;
+            defs = null;
             
         else {
             
