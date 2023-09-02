@@ -11,13 +11,14 @@ class opt_client {
         this.base_client = new base_client(host, port);
         this.l1_fields   = [ mdf.bid, mdf.bid_size, mdf.ask, mdf.ask_size, mdf.last, mdf.last_size ];
 
-    }
+    } 
 
 
     async get_defs_ind(ul_sym, exp, lo_str, hi_str, right) {
 
         exp             = String(exp);
         let exp_month   = exp.slice(0, -2);
+        let ul_conid    = null;
         let defs        = [];
         let res         = await this.base_client.search(ul_sym, true, "IND");
 
@@ -27,8 +28,8 @@ class opt_client {
             
         else {
             
-            const ul_conid  = res[0].conid;
-            res             = await this.base_client.secdef_info(ul_conid, "OPT", exp_month, "SMART", "0", right);
+            ul_conid    = res[0].conid;
+            res         = await this.base_client.secdef_info(ul_conid, "OPT", exp_month, "SMART", "0", right);
 
             if (!res)
 
@@ -63,7 +64,10 @@ class opt_client {
         
         }
 
-        return defs;
+        return {
+            "ul_conid": ul_conid,
+            "defs":     defs
+        };
 
     }
 
@@ -116,20 +120,20 @@ class opt_client {
     }
 
 
-    async sub_l1(defs) {
+    async sub_l1(conids) {
 
-        for (let i = 0; i < defs.length; i++)
+        for (let i = 0; i < conids.length; i++)
 
-            await this.base_client.sub_market_data(defs[i].conid, this.l1_fields);
+            await this.base_client.sub_market_data(conids[i], this.l1_fields);
 
     }
 
 
-    async unsub_l1(defs) {
+    async unsub_l1(conids) {
 
-        for (let i = 0; i < defs.length; i++)
+        for (let i = 0; i < conids; i++)
 
-            this.base_client.unsub_market_data(defs[i].conid);
+            this.base_client.unsub_market_data(conids[i]);
 
     }
 

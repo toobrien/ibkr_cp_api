@@ -42,17 +42,30 @@ async function demo_base_client() {
 
 }
 
+
 // demo_base_client();
+
 
 async function demo_opt_client() {
 
     const client = new opt_client();
 
     let res = await client.get_defs_ind("SPX", "20230901", 4470, 4530, "C");
-        res = client.get_butterfly_defs(res, "-", 1);
+        res = client.get_butterfly_defs(res.defs, "-", 1);
 
-    client.sub_l1(res);
+    if (res) {
+
+        let conids = res.map(def => def.conid);
+            
+        conids.append(res.ul_conid);
+
+        client.sub_l1(conids);
+
+    }
+
+    // client.unsub_l1(conids);
 
 }
+
 
 demo_opt_client();
