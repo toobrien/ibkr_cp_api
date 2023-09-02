@@ -35,7 +35,7 @@ class base_client {
 
             if (evt.data) {
             
-                let msg = JSON.parse(await evt.data.text(), null, 2);
+                let msg = JSON.parse(await evt.data.text());
 
                 console.log(JSON.stringify(msg, null, 2));
             
